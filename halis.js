@@ -341,6 +341,27 @@
     return classFn.bind(this)(className, 'toggle');
   };
 
+  function cloneFn( deep ) {
+    var result;
+
+    ns.isBooleanOrThrow(deep);
+
+    result = [];
+    _.each(this.elements, function( el ) {
+      result.push(el.cloneNode(deep));
+    });
+
+    return new HtmlCollection(result);
+  }
+
+  HtmlCollection.prototype.clone = function( ) {
+    return cloneFn.bind(this)(true);
+  };
+
+  HtmlCollection.prototype.cloneShallow = function( ) {
+    return cloneFn.bind(this)(false);
+  };
+
   function HtmlHandlers( el ) {
     var that = this;
 
