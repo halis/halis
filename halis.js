@@ -362,6 +362,25 @@
     return cloneFn.bind(this)(false);
   };
 
+  function siblingFn( fnName ) {
+    var result;
+
+    result = [];
+    _.each(this.elements, function( el ) {
+      result.push(el[fnName]);
+    });
+
+    return new HtmlCollection(result);
+  }
+
+  HtmlCollection.prototype.prev = function( ) {
+    return siblingFn.bind(this)('previousElementSibling');
+  };
+
+  HtmlCollection.prototype.next = function( ) {
+    return siblingFn.bind(this)('nextElementSibling');
+  };
+
   function HtmlHandlers( el ) {
     var that = this;
 
