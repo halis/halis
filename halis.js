@@ -258,6 +258,14 @@
     return result;
   };
 
+  HtmlCollection.prototype.attrs = function( attrs ) {
+    ns.isObjectOrThrow(attrs);
+
+    _.each(_.keys(attrs), function( key ) {
+      this.attr(key, attrs[key]);
+    }.bind(this));
+  };
+
   HtmlCollection.prototype.on = function( eventName, fn ) {
     var result;
 
