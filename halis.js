@@ -197,7 +197,7 @@
       el = document.getElementById(id);
       return new HtmlCollection(el ? [el] : []);
     },
-    klass: function( className ) {
+    class: function( className ) {
       return query(className, 'getElementsByClassName');
     },
     tag: function( tagName ) {
@@ -216,6 +216,8 @@
     _.each(this.elements, function( el ) {
       el.innerHTML = html;
     });
+
+    return this;
   };
 
   HtmlCollection.prototype.append = function( html ) {
@@ -223,12 +225,16 @@
     _.each(this.elements, function( el ) {
       el.innerHTML += html;
     });
+
+    return this;
   };
 
   HtmlCollection.prototype.empty = function() {
     _.each(this.elements, function( el ) {
       el.innerHTML = '';
     });
+
+    return this;
   };
 
   HtmlCollection.prototype.text = function( text ) {
@@ -236,6 +242,8 @@
     _.each(this.elements, function( el ) {
       el.innerText = text;
     });
+
+    return this;
   };
 
   HtmlCollection.prototype.attr = function( attr, val ) {
@@ -247,7 +255,7 @@
       _.each(this.elements, function( el ) {
         el.setAttribute(attr, val);
       });
-      return;
+      return this;
     }
 
     result = [];
@@ -264,6 +272,8 @@
     _.each(_.keys(attrs), function( key ) {
       this.attr(key, attrs[key]);
     }.bind(this));
+
+    return this;
   };
 
   HtmlCollection.prototype.on = function( eventName, fn ) {
@@ -278,6 +288,8 @@
       if (!el.handlers) el.handlers = new HtmlHandlers(el);
       el.handlers.add(eventName, fn);
     });
+
+    return this;
   };
 
   HtmlCollection.prototype.off = function( eventName ) {
@@ -293,6 +305,8 @@
       if (!el.handlers) el.handlers = new HtmlHandlers(el);
       el.handlers.remove(eventName);
     });
+
+    return this;
   };
 
   HtmlCollection.prototype.trigger = function( eventName ) {
@@ -301,6 +315,30 @@
     _.each(this.elements, function( el ) {
       if (el[eventName] && _.isFunction(el[eventName])) el[eventName]();
     });
+
+    return this;
+  };
+
+  function classFn( className, fnName ) {
+    ns.isStringNotEmptyOrThrow(className);
+
+    _.each(this.elements, function( el ) {
+      el.classList[fnName](className);
+    });
+
+    return this;
+  }
+
+  HtmlCollection.prototype.addClass = function( className ) {
+    return classFn.bind(this)(className, 'add');
+  };
+
+  HtmlCollection.prototype.removeClass = function( className ) {
+    return classFn.bind(this)(className, 'remove');
+  };
+
+  HtmlCollection.prototype.toggleClass = function( className ) {
+    return classFn.bind(this)(className, 'toggle');
   };
 
   function HtmlHandlers( el ) {
