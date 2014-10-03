@@ -1,6 +1,6 @@
 
 (function( _, halisConfig ) {
-	var ns;
+  var ns;
   
   (function() {
     var globalNS, conflict;
@@ -22,18 +22,18 @@
     delete window.halisConfig;
   }());
 
-	ns.typeNames = {
-		Boolean: 'Boolean',
-		Number: 'Number',
-		String: 'String',
-		Date: 'Date',
-		RegExp: 'RegExp',
-		Array: 'Array',
-		Object: 'Object',
-		Element: 'Element',
-		Function: 'Function',
-	};
-	ns.types = _.keys(ns.typeNames);
+  ns.typeNames = {
+  	Boolean: 'Boolean',
+  	Number: 'Number',
+  	String: 'String',
+  	Date: 'Date',
+  	RegExp: 'RegExp',
+  	Array: 'Array',
+  	Object: 'Object',
+  	Element: 'Element',
+  	Function: 'Function',
+  };
+  ns.types = _.keys(ns.typeNames);
 
   String.prototype.isEmptyOrWhiteSpace = String.prototype.isEmptyOrWhiteSpace || function() {
     return this.trim() === '';
@@ -142,7 +142,7 @@
            ].join(':');
   };
 
-	_.each(ns.types, function( type ) {
+  _.each(ns.types, function( type ) {
     var fn, fnName;
 
     fn = 'is{0}'.format(type);
@@ -151,7 +151,7 @@
 		ns[fnName] = function( obj ) {
       if (!_[fn](obj)) throw 'value is not of type {0}'.format(type);
     };
-	});
+  });
 
   ns.isArrayAndNotEmptyOrThrow = function( obj ) {
     ns.isArrayOrThrow(obj);
