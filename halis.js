@@ -190,26 +190,60 @@
     return new HtmlCollection(_.toArray(document[fnName](q)));
   }
 
-  ns.$ = {
-    id: function( id ) {
-      var el;
-      ns.isStringOrThrow(id);
-      el = document.getElementById(id);
-      return new HtmlCollection(el ? [el] : []);
-    },
-    class: function( className ) {
-      return query(className, 'getElementsByClassName');
-    },
-    tag: function( tagName ) {
-      return query(tagName, 'getElementsByTagName');
-    },
-    name: function( name ) {
-      return query(name, 'getElementsByName');
-    },
-    query: function( qry ) {
-      return query(qry, 'querySelectorAll');
-    },
+  ns.q = ns.query = {};
+
+
+  ns.q.i = ns.q.id = function( id ) {
+    var el;
+    ns.isStringOrThrow(id);
+    el = document.getElementById(id);
+    return new HtmlCollection(el ? [el] : []);
   };
+
+  ns.q.c = ns.q.class = function( className ) {
+    return query(className, 'getElementsByClassName');
+  };
+
+  ns.q.t = ns.q.tag = function( tagName ) {
+    return query(tagName, 'getElementsByTagName');
+  };
+
+  ns.q.n = ns.q.name = function( name ) {
+    return query(name, 'getElementsByName');
+  };
+
+  ns.q.a = ns.q.all = function( qry ) {
+    return query(qry, 'querySelectorAll');
+  };
+
+  function ajaxFn( method, url, data, successFn, errorFn ) {
+    var xhr;
+
+    _.isStringOrThrow(url);
+    if (successFn) _.isFunctionOrThrow(successFn);
+    if (errorFn) _.isFunctionOrThrow(errorFn);
+
+    xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+
+    if (successFn || errorFn) {
+      xhr.onreadystatechange = function (data) {
+        // TODO: call successFn or errorFn in here
+      }
+    }
+
+    if (data) xhr.send({ data: data });
+    else xhr.send();
+  }
+
+  ns.ajax = {
+    get: function( url, successFn, errorFn ) {
+      ajaxFn('GET', url, null, successFn, errorFn);
+    },
+    post: function( url, data, successFn, errorFn ) {
+      ajaxFn('POST', url, data, successFn, errorFn);
+    }
+  }
 
   HtmlCollection.prototype.html = function( html ) {
     ns.isStringOrThrow(html);
