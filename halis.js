@@ -192,7 +192,6 @@
 
   ns.q = ns.query = {};
 
-
   ns.q.i = ns.q.id = function( id ) {
     var el;
     ns.isStringOrThrow(id);
