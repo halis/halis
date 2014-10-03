@@ -194,7 +194,7 @@
     id: function( id ) {
       var el;
       ns.isStringOrThrow(id);
-      el = d.getElementById(id);
+      el = document.getElementById(id);
       return new HtmlCollection(el ? [el] : []);
     },
     klass: function( className ) {
