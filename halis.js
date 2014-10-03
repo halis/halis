@@ -148,7 +148,7 @@
     fn = 'is{0}'.format(type);
     fnName = '{0}OrThrow'.format(fn);
 
-		ns[fnName] = function( obj ) {
+    ns[fnName] = function( obj ) {
       if (!_[fn](obj)) throw 'value is not of type {0}'.format(type);
     };
   });
