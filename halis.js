@@ -112,6 +112,15 @@
     return this.indexOf(val) !== -1;
   };
 
+  Array.prototype.removeAt = Array.prototype.removeAt || function( index ) {
+    ns.isNumberOrThrow(index);
+    if (index < 0) throw 'out of bounds';
+    if (index >= this.length) throw 'out of bounds';
+    if (!this.length) return this;
+    this.splice(index, 1);
+    return this;
+  };
+
   Date.prototype.toShortDateString = Date.prototype.toShortDateString || function() {
     return [this.getMonth() + 1, 
             this.getDate(), 
