@@ -35,6 +35,28 @@
   };
   ns.types = _.keys(ns.typeNames);
 
+  String.prototype.query = String.prototype.query || function( obj ) {
+    var parts, part, result, q;
+    ns.isObjectOrThrow(obj);
+    if (this.endsWith('.') || this.startsWith('.')) throw 'invalid query';
+    if (this.match(/[^a-zA-Z0-9\_\$\.]/)) throw 'invalid query';
+
+    if (_.isEmpty(obj) || this.isEmptyOrWhiteSpace()) return;
+    if (!this.contains('.')) return obj[this];
+    parts = this.split('.');
+
+    result = obj;
+    while (parts.length) {
+      part = parts.shift();
+
+      if (_.isNaN(+part) === false) part = +part;
+      result = result[part];
+      if (result === undefined) return;
+    }
+
+    return result;
+  };
+
   function matchFn( str, regex ) {
     ns.isStringOrThrow(str);
     if (str.isEmptyOrWhiteSpace()) return false;
@@ -43,16 +65,23 @@
     return false;
   }
 
+  function escapeForRegex( str ) {
+    ns.isStringOrThrow(str);
+    return str.replace(/([()[{*+.$^\\|?])/g, '\\$1');
+  };
+
+  String.prototype.escapeForRegex = String.prototype.escapeForRegExp || escapeForRegex;
+
   String.prototype.startsWith = String.prototype.startsWith || function( str ) {
-    return matchFn.bind(this)(str, new RegExp('^' + str, 'i'));
+    return matchFn.bind(this)(str, new RegExp('^' + escapeForRegex(str), 'i'));
   };
 
   String.prototype.endsWith = String.prototype.endsWith || function( str ) {
-    return matchFn.bind(this)(str, new RegExp(str + '$', 'i'));
+    return matchFn.bind(this)(str, new RegExp(escapeForRegex(str) + '$', 'i'));
   };
 
   String.prototype.contains = String.prototype.contains || function( str ) {
-    return matchFn.bind(this)(str, new RegExp(str, 'i'));
+    return matchFn.bind(this)(str, new RegExp(escapeForRegex(str), 'i'));
   };
 
   String.prototype.isEmptyOrWhiteSpace = String.prototype.isEmptyOrWhiteSpace || function() {
@@ -192,7 +221,7 @@
     if (_.isEmpty(obj)) throw 'value is empty';
   };
 
-  ns.isStringNotEmptyOrThrow = function( obj ) {
+  ns.isStringAndNotEmptyOrThrow = function( obj ) {
     ns.isStringOrThrow(obj);
     if (obj.isEmptyOrWhiteSpace()) throw 'value is empty';
   };
