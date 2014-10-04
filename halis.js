@@ -35,6 +35,26 @@
   };
   ns.types = _.keys(ns.typeNames);
 
+  function matchFn( str, regex ) {
+    ns.isStringOrThrow(str);
+    if (str.isEmptyOrWhiteSpace()) return false;
+    if (this.trim() === '') return false;
+    if (this.match(regex)) return true;
+    return false;
+  }
+
+  String.prototype.startsWith = String.prototype.startsWith || function( str ) {
+    return matchFn.bind(this)(str, new RegExp('^' + str, 'i'));
+  };
+
+  String.prototype.endsWith = String.prototype.endsWith || function( str ) {
+    return matchFn.bind(this)(str, new RegExp(str + '$', 'i'));
+  };
+
+  String.prototype.contains = String.prototype.contains || function( str ) {
+    return matchFn.bind(this)(str, new RegExp(str, 'i'));
+  };
+
   String.prototype.isEmptyOrWhiteSpace = String.prototype.isEmptyOrWhiteSpace || function() {
     return this.trim() === '';
   };
