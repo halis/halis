@@ -1,6 +1,6 @@
 
 (function( _, halisConfig ) {
-  var ns;
+  var ns, pro;
   
   (function() {
     var globalNS, conflict;
@@ -35,7 +35,8 @@
   };
   ns.types = _.keys(ns.typeNames);
 
-  String.prototype.query = String.prototype.query || function( obj ) {
+  pro = String.prototype;
+  pro.query = pro.query || function( obj ) {
     var parts, part, result, q;
     ns.isObjectOrThrow(obj);
     if (this.endsWith('.') || this.startsWith('.')) throw 'invalid query';
@@ -57,38 +58,37 @@
     return result;
   };
 
-  function matchFn( str, regex ) {
-    ns.isStringOrThrow(str);
-    if (str.isEmptyOrWhiteSpace()) return false;
+  function matchFn( regex ) {
     if (this.trim() === '') return false;
     if (this.match(regex)) return true;
     return false;
   }
 
-  function escapeForRegex( str ) {
+  pro.escapeForRegex = pro.escapeForRegex || function() {
+    ns.isStringOrThrow(this);
+    return this.replace(/([()[{*+.$^\\|?])/g, '\\$1');
+  };
+
+  pro.startsWith = pro.startsWith || function( str ) {
     ns.isStringOrThrow(str);
-    return str.replace(/([()[{*+.$^\\|?])/g, '\\$1');
+    return matchFn.bind(this)(new RegExp('^' + str.escapeForRegex(), 'i'));
   };
 
-  String.prototype.escapeForRegex = String.prototype.escapeForRegExp || escapeForRegex;
-
-  String.prototype.startsWith = String.prototype.startsWith || function( str ) {
-    return matchFn.bind(this)(str, new RegExp('^' + escapeForRegex(str), 'i'));
+  pro.endsWith = pro.endsWith || function( str ) {
+    ns.isStringOrThrow(str);
+    return matchFn.bind(this)(new RegExp(str.escapeForRegex() + '$', 'i'));
   };
 
-  String.prototype.endsWith = String.prototype.endsWith || function( str ) {
-    return matchFn.bind(this)(str, new RegExp(escapeForRegex(str) + '$', 'i'));
+  pro.contains = pro.contains || function( str ) {
+    ns.isStringOrThrow(str);
+    return matchFn.bind(this)(new RegExp(str.escapeForRegex(), 'i'));
   };
 
-  String.prototype.contains = String.prototype.contains || function( str ) {
-    return matchFn.bind(this)(str, new RegExp(escapeForRegex(str), 'i'));
-  };
-
-  String.prototype.isEmptyOrWhiteSpace = String.prototype.isEmptyOrWhiteSpace || function() {
+  pro.isEmptyOrWhiteSpace = pro.isEmptyOrWhiteSpace || function() {
     return this.trim() === '';
   };
 
-  String.prototype.format = String.prototype.format || function() {
+  pro.format = pro.format || function() {
     var args, regex, esc, lb, rb, lbReplace, rbReplace, argReplace, ctr, that, delimiter;
 
     that = this;
@@ -137,11 +137,41 @@
     return that;
   };
 
-  Array.prototype.contains = Array.prototype.contains || function( val ) {
+  pro.repeat = function( num ) {
+    ns.isNumberOrThrow(num);
+    if (num < 1) return '';
+    return new Array(num + 1).join(this);
+  }
+
+  /*
+  pro = Number.prototype;
+  pro.toCurrency = pro.toCurrency || function( decimalPlaces, cultureString, currencyCode ) {
+    var result, regex;
+    decimalPlaces = decimalPlaces || 2;
+    cultureString = cultureString || 'en-US';
+    currencyCode = currencyCode || 'USD';
+    ns.isStringOrThrow(cultureString);
+    ns.isStringOrThrow(currencyCode);
+    ns.isNumberOrThrow(decimalPlaces);
+
+    result = this.toFixed(decimalPlaces);
+    result = this.toLocaleString(cultureString, { style: 'currency', currency: currencyCode });
+    regex = new RegExp('\\.' + '\\d'.repeat(decimalPlaces) + '$');
+
+    if (!matchFn.bind(result)(regex) && !result.endsWith('.')) result += '.';
+    while (!matchFn.bind(result)(regex)) {
+      result += '0';
+    }
+
+    return result;
+  };*/
+
+  pro = Array.prototype;
+  pro.contains = pro.contains || function( val ) {
     return this.indexOf(val) !== -1;
   };
 
-  Array.prototype.removeAt = Array.prototype.removeAt || function( index ) {
+  pro.removeAt = pro.removeAt || function( index ) {
     ns.isNumberOrThrow(index);
     if (index < 0) throw 'out of bounds';
     if (index >= this.length) throw 'out of bounds';
@@ -150,14 +180,15 @@
     return this;
   };
 
-  Date.prototype.toShortDateString = Date.prototype.toShortDateString || function() {
+  pro = Date.prototype;
+  pro.toShortDateString = pro.toShortDateString || function() {
     return [this.getMonth() + 1, 
             this.getDate(), 
             this.getFullYear()
            ].join('/');
   };
 
-  Date.prototype.toShortTimeString = Date.prototype.toShortTimeString || function() {
+  pro.toShortTimeString = pro.toShortTimeString || function() {
     var hours = this.getHours();
 
     return [hours - 12, 
@@ -165,11 +196,11 @@
            ].join(':') + ' ' + (hours < 12 ? 'AM' : 'PM');
   };
 
-  Date.prototype.toShortDateTimeString = Date.prototype.toShortDateTimeString || function() {
+  pro.toShortDateTimeString = pro.toShortDateTimeString || function() {
     return this.toShortDateString() + ' ' + this.toShortTimeString();
   }
 
-  Date.prototype.toSortString = Date.prototype.toSortString || function() {
+  pro.toSortString = pro.toSortString || function() {
     var month, date, hours, minutes, seconds, ms;
 
     month = this.getMonth();
@@ -210,6 +241,7 @@
       if (!_[fn](obj)) throw 'value is not of type {0}'.format(type);
     };
   });
+  pro = null;
 
   ns.isArrayAndNotEmptyOrThrow = function( obj ) {
     ns.isArrayOrThrow(obj);
