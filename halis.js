@@ -364,7 +364,7 @@
         if (success) fn = successFn;
         else fn = errorFn;
 
-        fn.apply(this, data);
+        fn.apply(this, [data, xhr]);
       }
     }
 
