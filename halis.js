@@ -157,28 +157,54 @@
     return result;
   };
 
-  /*
-  pro = Number.prototype;
-  pro.toCurrency = pro.toCurrency || function( decimalPlaces, cultureString, currencyCode ) {
-    var result, regex;
-    decimalPlaces = decimalPlaces || 2;
+  function numberFormatFn( decimalPlaces, cultureString, currencyCode ) {
+    var result, currentPlaces, neededPlaces;
+    decimalPlaces = _.isNumber(decimalPlaces) ? decimalPlaces : 2;
     cultureString = cultureString || 'en-US';
-    currencyCode = currencyCode || 'USD';
     ns.isStringOrThrow(cultureString);
-    ns.isStringOrThrow(currencyCode);
     ns.isNumberOrThrow(decimalPlaces);
 
     result = this.toFixed(decimalPlaces);
-    result = this.toLocaleString(cultureString, { style: 'currency', currency: currencyCode });
-    regex = new RegExp('\\.' + '\\d'.repeat(decimalPlaces) + '$');
+    if (currencyCode) {
+      result = this.toLocaleString(cultureString, { style: 'currency', currency: currencyCode });
+    } else {
+      result = this.toLocaleString(cultureString);
+    }
 
-    if (!matchFn.bind(result)(regex) && !result.endsWith('.')) result += '.';
-    while (!matchFn.bind(result)(regex)) {
-      result += '0';
+    if (!result.contains('.')) {
+      if (decimalPlaces > 0) {
+        result += '.';
+        result += '0'.repeat(decimalPlaces);
+      }
+    } else {
+      if (result.endsWith('.')) {
+        result += '0'.repeat(decimalPlaces);
+      } else {
+        if (decimalPlaces === 0) {
+          result = result.replace(/\.\d+/, '');
+        } else {
+          currentPlaces = result.match(/\.\d+/).pop().substring(1).length;
+          neededPlaces = decimalPlaces - currentPlaces;
+          if (neededPlaces < 1) {
+            result = result.substr(0, result.length + neededPlaces);
+          } else {
+            result += '0'.repeat(neededPlaces);
+          }
+        }
+      }
     }
 
     return result;
-  };*/
+  }
+
+  pro = Number.prototype;
+  pro.toDecimal = pro.toDecimal || function( decimalPlaces, cultureString ) {
+    return numberFormatFn.bind(this)(decimalPlaces, cultureString, null);
+  };
+
+  pro.toCurrency = pro.toCurrency || function( decimalPlaces, cultureString, currencyCode ) {
+    return numberFormatFn.bind(this)(decimalPlaces, cultureString, currencyCode || 'USD');
+  };
 
   pro = Array.prototype;
   pro.contains = pro.contains || function( val ) {
