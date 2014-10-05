@@ -160,7 +160,7 @@
   pro.parseUrl = pro.parseUrl || function() {
     var anchor;
 
-    if (this.isEmptyOrWhiteSpace()) return {};
+    if (this.isEmptyOrWhiteSpace()) return null;
 
     anchor = document.createElement('a');
     anchor.href = this.trim().toLowerCase();
@@ -181,6 +181,11 @@
     }
 
     return anchor;
+  };
+
+  pro.el = pro.el || function() {
+    if (this.isEmptyOrWhiteSpace()) return null;
+    return document.createElement(this.trim().toLowerCase());
   };
 
   function numberFormatFn( decimalPlaces, cultureString, currencyCode ) {
