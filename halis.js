@@ -356,8 +356,15 @@
     xhr.open(method, url);
 
     if (successFn || errorFn) {
-      xhr.onreadystatechange = function (data) {
-        // TODO: call successFn or errorFn in here
+      xhr.onreadystatechange = function ( data ) {
+        var success, fn;
+        if (xhr.readyState !== 4) return;
+
+        success = xhr.status >= 200 && xhr.status < 300 || xhr.status === 304;
+        if (success) fn = successFn;
+        else fn = errorFn;
+
+        fn.apply(this, data);
       }
     }
 
@@ -371,6 +378,12 @@
     },
     post: function( url, data, successFn, errorFn ) {
       ajaxFn('POST', url, data, successFn, errorFn);
+    },
+    put: function( url, data, successFn, errorFn ) {
+      ajaxFn('PUT', url, data, successFn, errorFn);
+    },
+    delete: function( url, data, successFn, errorFn ) {
+      ajaxFn('DELETE', url, data, successFn, errorFn);
     }
   }
 
