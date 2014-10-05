@@ -141,7 +141,21 @@
     ns.isNumberOrThrow(num);
     if (num < 1) return '';
     return new Array(num + 1).join(this);
-  }
+  };
+
+  pro.slugify = function() {
+    var result;
+    if (this.isEmptyOrWhiteSpace()) return '';
+
+    result = this.toLowerCase().trim();
+    result = result.replace(/[^a-zA-Z0-9\s]/g, ' ');
+    result = result.trim();
+    result = result.replace(/\s+/g, ' ');
+    result = result.replace(/\s+/g, '-');
+    result = result.replace(/\-+/g, '-');
+
+    return result;
+  };
 
   /*
   pro = Number.prototype;
