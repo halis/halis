@@ -157,6 +157,32 @@
     return result;
   };
 
+  pro.parseUrl = pro.parseUrl || function() {
+    var anchor;
+
+    if (this.isEmptyOrWhiteSpace()) return {};
+
+    anchor = document.createElement('a');
+    anchor.href = this.trim().toLowerCase();
+
+    anchor.parameterObject = {};
+    anchor.parameterArray = [];
+    if (!anchor.search.isEmptyOrWhiteSpace()) {
+      _.each(anchor.search.substr(1).split('&'), function( kvPair ) {
+        var parts;
+        kvPair = kvPair.trim();
+        parts = kvPair.split('=');
+        anchor.parameterArray.push({
+          key: parts[0],
+          value: parts[1],
+        });
+        anchor.parameterObject[parts[0]] = parts[1];
+      });
+    }
+
+    return anchor;
+  };
+
   function numberFormatFn( decimalPlaces, cultureString, currencyCode ) {
     var result, currentPlaces, neededPlaces;
     decimalPlaces = _.isNumber(decimalPlaces) ? decimalPlaces : 2;
