@@ -1,6 +1,6 @@
 
 (function( _, halisConfig ) {
-  var ns, pro;
+  var halis, pro;
   
   (function() {
     var globalNS, conflict;
@@ -8,11 +8,11 @@
     if (window[globalNS]) {
       conflict = window[globalNS];
     }
-    ns = window[globalNS] = {};
+    halis = window[globalNS] = {};
 
-    if (!window.h) window.h = ns;
+    if (!window.h) window.h = halis;
 
-    ns.noConflict = function() {
+    halis.noConflict = function() {
       if (conflict) {
         window[globalNS] = conflict;
       }
@@ -22,7 +22,7 @@
     delete window.halisConfig;
   }());
 
-  ns.typeNames = {
+  halis.typeNames = {
   	Boolean: 'Boolean',
   	Number: 'Number',
   	String: 'String',
@@ -33,12 +33,12 @@
   	Element: 'Element',
   	Function: 'Function',
   };
-  ns.types = _.keys(ns.typeNames);
+  halis.types = _.keys(halis.typeNames);
 
   pro = String.prototype;
   pro.query = pro.query || function( obj ) {
     var parts, part, result, q;
-    ns.isObjectOrThrow(obj);
+    halis.isObjectOrThrow(obj);
     if (this.endsWith('.') || this.startsWith('.')) throw 'invalid query';
     if (this.match(/[^a-zA-Z0-9\_\$\.]/)) throw 'invalid query';
 
@@ -58,6 +58,11 @@
     return result;
   };
 
+  halis.getProp = function( obj, qry ) {
+    halis.isStringOrThrow(qry);
+    return qry.query(obj);
+  };
+
   function matchFn( regex ) {
     if (this.trim() === '') return false;
     if (this.match(regex)) return true;
@@ -65,22 +70,22 @@
   }
 
   pro.escapeForRegex = pro.escapeForRegex || function() {
-    ns.isStringOrThrow(this);
+    halis.isStringOrThrow(this);
     return this.replace(/([()[{*+.$^\\|?])/g, '\\$1');
   };
 
   pro.startsWith = pro.startsWith || function( str ) {
-    ns.isStringOrThrow(str);
+    halis.isStringOrThrow(str);
     return matchFn.bind(this)(new RegExp('^' + str.escapeForRegex(), 'i'));
   };
 
   pro.endsWith = pro.endsWith || function( str ) {
-    ns.isStringOrThrow(str);
+    halis.isStringOrThrow(str);
     return matchFn.bind(this)(new RegExp(str.escapeForRegex() + '$', 'i'));
   };
 
   pro.contains = pro.contains || function( str ) {
-    ns.isStringOrThrow(str);
+    halis.isStringOrThrow(str);
     return matchFn.bind(this)(new RegExp(str.escapeForRegex(), 'i'));
   };
 
@@ -138,7 +143,7 @@
   };
 
   pro.repeat = function( num ) {
-    ns.isNumberOrThrow(num);
+    halis.isNumberOrThrow(num);
     if (num < 1) return '';
     return new Array(num + 1).join(this);
   };
@@ -192,8 +197,8 @@
     var result, currentPlaces, neededPlaces;
     decimalPlaces = _.isNumber(decimalPlaces) ? decimalPlaces : 2;
     cultureString = cultureString || 'en-US';
-    ns.isStringOrThrow(cultureString);
-    ns.isNumberOrThrow(decimalPlaces);
+    halis.isStringOrThrow(cultureString);
+    halis.isNumberOrThrow(decimalPlaces);
 
     result = this.toFixed(decimalPlaces);
     if (currencyCode) {
@@ -243,7 +248,7 @@
   };
 
   pro.removeAt = pro.removeAt || function( index ) {
-    ns.isNumberOrThrow(index);
+    halis.isNumberOrThrow(index);
     if (index < 0) throw 'out of bounds';
     if (index >= this.length) throw 'out of bounds';
     if (!this.length) return this;
@@ -302,36 +307,36 @@
            ].join(':');
   };
 
-  _.each(ns.types, function( type ) {
+  _.each(halis.types, function( type ) {
     var fn, fnName;
 
     fn = 'is{0}'.format(type);
     fnName = '{0}OrThrow'.format(fn);
 
-    ns[fnName] = function( obj ) {
+    halis[fnName] = function( obj ) {
       if (!_[fn](obj)) throw 'value is not of type {0}'.format(type);
     };
   });
   pro = null;
 
-  ns.isArrayAndNotEmptyOrThrow = function( obj ) {
-    ns.isArrayOrThrow(obj);
+  halis.isArrayAndNotEmptyOrThrow = function( obj ) {
+    halis.isArrayOrThrow(obj);
     if (_.isEmpty(obj)) throw 'value is empty';
   };
 
-  ns.isObjectAndNotEmptyOrThrow = function( obj ) {
-    ns.isObjectOrThrow(obj);
+  halis.isObjectAndNotEmptyOrThrow = function( obj ) {
+    halis.isObjectOrThrow(obj);
     if (_.isEmpty(obj)) throw 'value is empty';
   };
 
-  ns.isStringAndNotEmptyOrThrow = function( obj ) {
-    ns.isStringOrThrow(obj);
+  halis.isStringAndNotEmptyOrThrow = function( obj ) {
+    halis.isStringOrThrow(obj);
     if (obj.isEmptyOrWhiteSpace()) throw 'value is empty';
   };
 
   function HtmlCollection( arr ) {
     var that = this, h = {};
-    ns.isArrayOrThrow(arr);
+    halis.isArrayOrThrow(arr);
     that.elements = arr;
 
     that.pop = function() {
@@ -347,32 +352,32 @@
   }
 
   function query( q, fnName ) {
-    ns.isStringOrThrow(q);
+    halis.isStringOrThrow(q);
     return new HtmlCollection(_.toArray(document[fnName](q)));
   }
 
-  ns.q = ns.query = {};
+  halis.q = halis.query = {};
 
-  ns.q.i = ns.q.id = function( id ) {
+  halis.q.i = halis.q.id = function( id ) {
     var el;
-    ns.isStringOrThrow(id);
+    halis.isStringOrThrow(id);
     el = document.getElementById(id);
     return new HtmlCollection(el ? [el] : []);
   };
 
-  ns.q.c = ns.q.class = function( className ) {
+  halis.q.c = halis.q.class = function( className ) {
     return query(className, 'getElementsByClassName');
   };
 
-  ns.q.t = ns.q.tag = function( tagName ) {
+  halis.q.t = halis.q.tag = function( tagName ) {
     return query(tagName, 'getElementsByTagName');
   };
 
-  ns.q.n = ns.q.name = function( name ) {
+  halis.q.n = halis.q.name = function( name ) {
     return query(name, 'getElementsByName');
   };
 
-  ns.q.a = ns.q.all = function( qry ) {
+  halis.q.a = halis.q.all = function( qry ) {
     return query(qry, 'querySelectorAll');
   };
 
@@ -403,7 +408,7 @@
     else xhr.send();
   }
 
-  ns.ajax = {
+  halis.ajax = {
     get: function( url, successFn, errorFn ) {
       ajaxFn('GET', url, null, successFn, errorFn);
     },
@@ -419,7 +424,7 @@
   }
 
   HtmlCollection.prototype.html = function( html ) {
-    ns.isStringOrThrow(html);
+    halis.isStringOrThrow(html);
     _.each(this.elements, function( el ) {
       el.innerHTML = html;
     });
@@ -428,7 +433,7 @@
   };
 
   HtmlCollection.prototype.append = function( html ) {
-    ns.isStringOrThrow(html);
+    halis.isStringOrThrow(html);
     _.each(this.elements, function( el ) {
       el.innerHTML += html;
     });
@@ -445,7 +450,7 @@
   };
 
   HtmlCollection.prototype.text = function( text ) {
-    ns.isStringOrThrow(text);
+    halis.isStringOrThrow(text);
     _.each(this.elements, function( el ) {
       el.innerText = text;
     });
@@ -456,7 +461,7 @@
   HtmlCollection.prototype.attr = function( attr, val ) {
     var result;
 
-    ns.isStringOrThrow(attr);
+    halis.isStringOrThrow(attr);
 
     if (val !== undefined) {
       _.each(this.elements, function( el ) {
@@ -474,7 +479,7 @@
   };
 
   HtmlCollection.prototype.attrs = function( attrs ) {
-    ns.isObjectOrThrow(attrs);
+    halis.isObjectOrThrow(attrs);
 
     _.each(_.keys(attrs), function( key ) {
       this.attr(key, attrs[key]);
@@ -486,8 +491,8 @@
   HtmlCollection.prototype.on = function( eventName, fn ) {
     var result;
 
-    ns.isStringOrThrow(eventName);
-    ns.isFunctionOrThrow(fn);
+    halis.isStringOrThrow(eventName);
+    halis.isFunctionOrThrow(fn);
 
     _.each(this.elements, function( el ) {
       el.addEventListener(eventName, fn, false);
@@ -502,7 +507,7 @@
   HtmlCollection.prototype.off = function( eventName ) {
     var handlers;
 
-    ns.isStringOrThrow(eventName);
+    halis.isStringOrThrow(eventName);
 
     _.each(this.elements, function( el ) {
       handlers = el.handlers.get()[eventName];
@@ -517,7 +522,7 @@
   };
 
   HtmlCollection.prototype.trigger = function( eventName ) {
-    ns.isStringOrThrow(eventName);
+    halis.isStringOrThrow(eventName);
 
     _.each(this.elements, function( el ) {
       if (el[eventName] && _.isFunction(el[eventName])) el[eventName]();
@@ -527,7 +532,7 @@
   };
 
   function classFn( className, fnName ) {
-    ns.isStringNotEmptyOrThrow(className);
+    halis.isStringNotEmptyOrThrow(className);
 
     _.each(this.elements, function( el ) {
       el.classList[fnName](className);
@@ -551,7 +556,7 @@
   function cloneFn( deep ) {
     var result;
 
-    ns.isBooleanOrThrow(deep);
+    halis.isBooleanOrThrow(deep);
 
     result = [];
     _.each(this.elements, function( el ) {
@@ -610,7 +615,7 @@
     return that;
   }
 
-  ns.cancelEvent = function( e ) {
+  halis.cancelEvent = function( e ) {
     e.preventDefault();
     e.stopImmediatePropagation();
     return false;
