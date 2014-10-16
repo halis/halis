@@ -33,7 +33,7 @@ halis.getProp(x, 'hello.world.whats.up');
 
 ```javascript
 '^Hello$'.escapeForRegex();
-// "\^Hello\$"
+// "\^Hello\$" for when you want to create a RegExp with the constructor
 ```
 
 
@@ -67,7 +67,7 @@ halis.getProp(x, 'hello.world.whats.up');
 ```
 
 
-```
+```javascript
 'yoho '.repeat(2);
 // "yoho yoho "
 ```
@@ -98,6 +98,8 @@ var x = 5; x.toDecimal(3);
 // "5.000"
 var x = 5; x.toCurrency();
 // "$5.00"
+
+// Both of these have culture options available
 ```
 
 
@@ -139,10 +141,10 @@ new Date().toSortString();
 
 ```javascript
 halis.isStringOrThrow('hi');
-// undefined // nothing happens
+// undefined, nothing happens
 
 h.isStringOrThrow(2); // instead of halis you can use h
-// "value is not of type String" // exception
+// "value is not of type String", exception
 ```
 
 
