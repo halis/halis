@@ -264,11 +264,19 @@
            ].join('/');
   };
 
+  function pad( num ) {
+    if (num > 9) return num.toString();
+    else return '0' + num;
+  }
+
   pro.toShortTimeString = pro.toShortTimeString || function() {
     var hours = this.getHours();
 
-    return [hours - 12, 
-            this.getMinutes()
+    if (hours === 0) hours = 12;
+    else if (hours > 12) hours -= 12;
+
+    return [hours, 
+            pad(this.getMinutes())
            ].join(':') + ' ' + (hours < 12 ? 'AM' : 'PM');
   };
 
@@ -285,11 +293,6 @@
     minutes = this.getMinutes();
     seconds = this.getSeconds();
     ms = this.getMilliseconds();
-
-    function pad( num ) {
-      if (num > 9) return num.toString();
-      else return '0' + num;
-    }
 
     function padMS( num ) {
       if (num > 99) return num.toString();
