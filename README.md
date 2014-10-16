@@ -16,6 +16,27 @@ Currently, lo-dash (based on [underscore](http://underscorejs.org)) is the only 
 The idea of halis is to provide a jQuery-like API that relies more on native function calls, for speed. Also, various utility methods are provided for strings, dates, arrays and checking arguments.
 
 
+Installation
+------------
+
+```javascript
+<script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+  <script type="text/javascript">
+    window.halisConfig = {
+      //namespace: 'h',
+    };
+  </script>
+  <script type='text/javascript' src='./halis.js'></script>
+```
+Include lodash and halis.js, you may optionally define halisConfig before loading halis.js 
+and set the namespace property to tell halis to load under window[namespace] instead of window.halis
+
+halis loads under window.halis by default and window.h (if available) as well
+
+On the off chance that window.halis is set to something already, it is tracked so that you can 
+call halis.noConflict() and window.halis will be reverted to its original state and then halis is returned
+
+
 Getting Started
 ---------------
 
