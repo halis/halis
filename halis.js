@@ -4,7 +4,13 @@
   
   (function() {
     var globalNS, conflict;
-    globalNS = halisConfig.namespace || 'halis';
+    
+    if (halisConfig) {
+      globalNS = halisConfig.namespace || 'halis';
+    } else {
+      globalNS = 'halis';
+    }
+
     if (window[globalNS]) {
       conflict = window[globalNS];
     }
