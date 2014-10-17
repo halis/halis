@@ -198,10 +198,15 @@ halis.isStringAndNotEmptyOrThrow({});
 
 ```javascript
 halis.query.id('') // getElementById()
-halis.query.class('') // getElementsByClassName()
+halis.q.class('') // getElementsByClassName(), can use q instead of query
 halis.query.tag('') // getElementsByTagName()
 halis.query.name('') // getElementsByName()
 halis.query.all('') // querySelectorAll()
+
+// id, class, tag, name and all can be replaced with the first letter
+// earlier we mentioned you can do halis or h
+// and query or q
+// so the first query above can be shortened to h.q.i(''), so on and so forth
 
 // all these methods query the DOM and return an HTMLCollection
 // (so you can operate on an array like jQuery)
