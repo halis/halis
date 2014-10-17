@@ -432,14 +432,19 @@
     }
   };
 
-  halis.is = function(obj, type) {
+  halis.is = function( obj, type ) {
     halis.isObjectOrThrow(obj);
     halis.isObjectOrThrow(type);
 
     return obj instanceof type; 
   };
 
-  HtmlCollection.prototype.html = function( html ) {
+  halis.isOrThrow = function( obj, type ) {
+    if (!halis.is(obj, type)) throw 'obj is not type {0}'.format(type.name);
+  };
+
+  pro = HtmlCollection.prototype;
+  pro.html = function( html ) {
     halis.isStringOrThrow(html);
     _.each(this.elements, function( el ) {
       el.innerHTML = html;
@@ -448,7 +453,7 @@
     return this;
   };
 
-  HtmlCollection.prototype.append = function( html ) {
+  pro.append = function( html ) {
     halis.isStringOrThrow(html);
     _.each(this.elements, function( el ) {
       el.innerHTML += html;
@@ -457,7 +462,7 @@
     return this;
   };
 
-  HtmlCollection.prototype.empty = function() {
+  pro.empty = function() {
     _.each(this.elements, function( el ) {
       el.innerHTML = '';
     });
@@ -465,7 +470,7 @@
     return this;
   };
 
-  HtmlCollection.prototype.text = function( text ) {
+  pro.text = function( text ) {
     halis.isStringOrThrow(text);
     _.each(this.elements, function( el ) {
       el.innerText = text;
@@ -474,7 +479,7 @@
     return this;
   };
 
-  HtmlCollection.prototype.attr = function( attr, val ) {
+  pro.attr = function( attr, val ) {
     var result;
 
     halis.isStringOrThrow(attr);
@@ -494,7 +499,7 @@
     return result;
   };
 
-  HtmlCollection.prototype.attrs = function( attrs ) {
+  pro.attrs = function( attrs ) {
     halis.isObjectOrThrow(attrs);
 
     _.each(_.keys(attrs), function( key ) {
@@ -504,7 +509,7 @@
     return this;
   };
 
-  HtmlCollection.prototype.on = function( eventName, fn ) {
+  pro.on = function( eventName, fn ) {
     var result;
 
     halis.isStringOrThrow(eventName);
@@ -520,7 +525,7 @@
     return this;
   };
 
-  HtmlCollection.prototype.off = function( eventName ) {
+  pro.off = function( eventName ) {
     var handlers;
 
     halis.isStringOrThrow(eventName);
@@ -537,7 +542,7 @@
     return this;
   };
 
-  HtmlCollection.prototype.trigger = function( eventName ) {
+  pro.trigger = function( eventName ) {
     halis.isStringOrThrow(eventName);
 
     _.each(this.elements, function( el ) {
@@ -557,15 +562,15 @@
     return this;
   }
 
-  HtmlCollection.prototype.addClass = function( className ) {
+  pro.addClass = function( className ) {
     return classFn.bind(this)(className, 'add');
   };
 
-  HtmlCollection.prototype.removeClass = function( className ) {
+  pro.removeClass = function( className ) {
     return classFn.bind(this)(className, 'remove');
   };
 
-  HtmlCollection.prototype.toggleClass = function( className ) {
+  pro.toggleClass = function( className ) {
     return classFn.bind(this)(className, 'toggle');
   };
 
@@ -582,11 +587,11 @@
     return new HtmlCollection(result);
   }
 
-  HtmlCollection.prototype.clone = function( ) {
+  pro.clone = function( ) {
     return cloneFn.bind(this)(true);
   };
 
-  HtmlCollection.prototype.cloneShallow = function( ) {
+  pro.cloneShallow = function( ) {
     return cloneFn.bind(this)(false);
   };
 
@@ -601,11 +606,11 @@
     return new HtmlCollection(result);
   }
 
-  HtmlCollection.prototype.prev = function( ) {
+  pro.prev = function( ) {
     return siblingFn.bind(this)('previousElementSibling');
   };
 
-  HtmlCollection.prototype.next = function( ) {
+  pro.next = function( ) {
     return siblingFn.bind(this)('nextElementSibling');
   };
 
@@ -631,22 +636,29 @@
     return that;
   }
 
-  HtmlCollection.prototype.get = function() {
+  pro.get = function() {
     var result = [];
 
     _.each(this.elements, function( el ) {
-      if (halis.is(el, HTMLInputElement)) {
-        if (el.type.toLowerCase() === 'checkbox') {
-          result.push(el.checked);
-        } else if (el.type.toLowerCase() === 'textbox') {
-          result.push(el.value);
-        }
-      } else if (halis.is(el, HTMLSelectElement)) {
-        result.push(el.value);
-      }
+      result.push(halis.fn.get(el));
     });
 
     return result;
+  };
+
+  halis.fn = {};
+  halis.fn.get = function( el ) {
+    halis.isOrThrow(el, HTMLElement);
+
+    if (halis.is(el, HTMLInputElement)) {
+      if (el.type.toLowerCase() === 'checkbox') {
+        return el.checked;
+      } else if (el.type.toLowerCase() === 'text') {
+        return el.value;
+      }
+    } else if (halis.is(el, HTMLSelectElement)) {
+      return el.value;
+    }
   };
 
   halis.cancelEvent = function( e ) {

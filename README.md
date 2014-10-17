@@ -231,6 +231,14 @@ halis.query.all('') // querySelectorAll()
 
 
 ```javascript
+// halis.fn has convenience methods to operate on one HTMLElement
+// these will be delegated to run on an entire HtmlCollection
+
+halis.fn.get(el) // returns value of element no matter the type
+```
+
+
+```javascript
 h.ajax.post( url, data, successFn, errorFn );
 h.ajax.put( url, data, successFn, errorFn );
 h.ajax.get( url, successFn, errorFn );
