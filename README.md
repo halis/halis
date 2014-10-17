@@ -235,6 +235,8 @@ halis.query.all('') // querySelectorAll()
 // these will be delegated to run on an entire HtmlCollection
 
 halis.fn.get(el) // returns value of element no matter the type
+// and in turn
+HtmlCollection.get()
 ```
 
 
