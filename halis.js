@@ -640,7 +640,7 @@
       }
     });
 
-    return this;
+    return result;
   };
 
   halis.cancelEvent = function( e ) {
