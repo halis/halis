@@ -424,7 +424,14 @@
     delete: function( url, data, successFn, errorFn ) {
       ajaxFn('DELETE', url, data, successFn, errorFn);
     }
-  }
+  };
+
+  halis.is = function(obj, type) {
+    halis.isObjectOrThrow(obj);
+    halis.isObjectOrThrow(type);
+
+    return obj instanceof type; 
+  };
 
   HtmlCollection.prototype.html = function( html ) {
     halis.isStringOrThrow(html);
@@ -617,6 +624,24 @@
 
     return that;
   }
+
+  HtmlCollection.prototype.get = function() {
+    var result = [];
+
+    _.each(this.elements, function( el ) {
+      if (halis.is(el, HTMLInputElement)) {
+        if (el.type.toLowerCase() === 'checkbox') {
+          result.push(el.checked);
+        } else if (el.type.toLowerCase() === 'textbox') {
+          result.push(el.value);
+        }
+      } else if (halis.is(el, HTMLSelectElement)) {
+        result.push(el.value);
+      }
+    });
+
+    return this;
+  };
 
   halis.cancelEvent = function( e ) {
     e.preventDefault();
