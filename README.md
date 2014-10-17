@@ -166,12 +166,33 @@ halis.isStringOrThrow('hi');
 
 h.isStringOrThrow(2); // instead of halis you can use h
 // "value is not of type String", exception
+
+/*
+We also have is?OrThrow for the following types
+Boolean: 'Boolean',
+Number: 'Number',
+String: 'String',
+Date: 'Date',
+RegExp: 'RegExp',
+Array: 'Array',
+Object: 'Object',
+Element: 'Element',
+Function: 'Function'
+
+You can access these at halis.types (array) or halis.typeNames (object)
+*/
 ```
 
 
 ```javascript
 halis.isArrayAndNotEmptyOrThrow([]);
 // "value is empty"
+
+halis.isObjectAndNotEmptyOrThrow({});
+// undefined, nothing happens
+
+halis.isStringAndNotEmptyOrThrow({});
+// "value is not of type String"
 ```
 
 
@@ -189,7 +210,8 @@ halis.query.all('') // querySelectorAll()
 
 
 ```javascript
-// These methods operate on HtmlCollection (returned from halis dom query)
+// These methods are similar to what you use in jQuery
+// they operate on an HtmlCollection, which is what the halis query methods return
   .html(html)   // sets html
   .text(text)   // sets text
   .append(html) // appends html
