@@ -40,6 +40,12 @@ call halis.noConflict() and window.halis will be reverted to its original state 
 Getting Started
 ---------------
 
+To run the tests run:
+```
+git clone https://github.com/halis/halis.git
+```
+and then open test.html in a browser
+
 So what can we do?
 
 ```javascript
