@@ -70,3 +70,51 @@ QUnit.test("el", function( assert ) {
   assert.equal(halis.is(x, HTMLDivElement), true);
   assert.equal(halis.is(x.attributes, NamedNodeMap), true);
 });
+
+QUnit.test("toDecimal", function( assert ) {
+  var x = 5; 
+  assert.equal(x.toDecimal(3), '5.000');
+  assert.equal(x.toDecimal(0), '5');
+});
+
+QUnit.test("toCurrency", function( assert ) {
+  var x = 5; 
+  assert.equal(x.toCurrency(2), '$5.00');
+  assert.equal(x.toCurrency(0), '$5');
+});
+
+QUnit.test("contains", function( assert ) {
+  var x = [1,2,3,4,5]; 
+  assert.equal(x.contains(4), true);
+  assert.equal(x.contains(6), false);
+});
+
+QUnit.test("removeAt", function( assert ) {
+  var x = [1,2,3,4,5];
+  x.removeAt(1);
+  assert.equal(x.length, 4);
+  assert.equal(x[0], 1);
+  assert.equal(x[1], 3);
+  assert.equal(x[2], 4);
+  assert.equal(x[3], 5);
+});
+
+QUnit.test("toShortDateString", function( assert ) {
+  var x = new Date(2014,0,1,4,30,0,0); 
+  assert.equal(x.toShortDateString(), '1/1/2014');
+});
+
+QUnit.test("toShortTimeString", function( assert ) {
+  var x = new Date(2014,0,1,4,30,0,0); 
+  assert.equal(x.toShortTimeString(), '4:30 AM');
+});
+
+QUnit.test("toShortDateTimeString", function( assert ) {
+  var x = new Date(2014,0,1,4,30,0,0); 
+  assert.equal(x.toShortDateTimeString(), '1/1/2014 4:30 AM');
+});
+
+QUnit.test("toSortString", function( assert ) {
+  var x = new Date(2014,0,1,4,30,0,0); 
+  assert.equal(x.toSortString(), '2014:00:01:04:30:00:000');
+});
