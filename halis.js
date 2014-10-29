@@ -756,4 +756,29 @@
     else throw msg;
   };
 
+  halis.plans = {};
+  halis.engineer = function( constructorFn, factoryFn ) {
+    var name;
+    var plan
+
+    h.isFunctionOrThrow(constructorFn);
+    h.isFunctionOrThrow(factoryFn);
+
+    name = constructorFn.name;
+    if (halis.plans[name]) halis.throw('class already registered');
+    h.isStringAndNotEmptyOrThrow(name);
+
+    plan = {
+      plan: constructorFn,
+      builder: factoryFn,
+    };
+
+    plan.build = function() {
+      return plan.builder(plan.plan);
+    }
+    halis.plans[name] = plan;
+
+    return plan;
+  };
+
 }(_, window.halisConfig));

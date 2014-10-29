@@ -307,3 +307,29 @@ window.halisConfig = {
 // if this is set in halisConfig (in a script tag before halis.js is loaded)
 // then anytime halis.throw is called it will log instead of throw
 ```
+---
+```javascript
+// If we have the following constructor and factory functions:
+function Cell() {
+  this.x = 0;
+  this.y = 0;
+};
+
+function CellFactory( constructorFn ) {
+  var result;
+  result = new constructorFn();
+  result.x += 1;
+  result.y += 1;
+  return result;
+};
+
+// then we can register these in halis.plans via:
+// halis.engineer = function( constructorFn, factoryFn ) {
+
+halis.engineer(halis.Cell, halis.CellFactory);
+// Object {plan: function, builder: function, build: function}
+
+halis.plans.Cell.build()
+// Cell {x: 1, y: 1}
+
+```
