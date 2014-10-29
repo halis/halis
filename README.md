@@ -253,6 +253,7 @@ return halis.cancelEvent(e);
 halis.getTemplates();
 // The templates will reside at halis.templates
 // Object {first: "<div>Hello</div>", second: "<div>There</div>", third: "<div>World</div>"}
+// Also note that the templates will be removed from the dom
 ```
 ---
 ```javascript
@@ -286,6 +287,7 @@ halis.namespace('halis.hello.world');
 ---
 ```javascript
 // halis.throw = function( msg, showStackTrace ) {
+// Note: showStackTrace defaults to true
 
 h.throw('test');
 Error
@@ -301,11 +303,14 @@ Uncaught test
 
 // halis also uses this throw method internally now, in functions like isStringOrThrow
 // there is a config option:
-window.halisConfig = {
-  logInsteadOfThrow: true,
-};
+<script type="text/javascript">
+  window.halisConfig = {
+    logInsteadOfThrow: true,
+  };
+</script>
+<script type='text/javascript' src='./halis.js'></script>
 // if this is set in halisConfig (in a script tag before halis.js is loaded)
-// then anytime halis.throw is called it will log instead of throw
+// then anytime halis.throw is called it will log to the console instead of throw
 ```
 ---
 ```javascript
@@ -322,6 +327,9 @@ function CellFactory( constructorFn ) {
   result.y += 1;
   return result;
 };
+// Note that when you write your factory function
+// you need to pass in the constructorFn (somewhere) 
+// and use that instead of referencing Cell directly
 
 // then we can register these in halis.plans via:
 // halis.engineer = function( constructorFn, factoryFn ) {
