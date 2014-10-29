@@ -47,7 +47,7 @@ git clone https://github.com/halis/halis.git
 and then open test.html in a browser
 
 So what can we do?
-
+---
 ```javascript
 var x = { hello: { world: { whats: { up: 'nothing much' } } } };
 'hello.world.whats.up'.query(x);
@@ -56,70 +56,59 @@ var x = { hello: { world: { whats: { up: 'nothing much' } } } };
 halis.getProp(x, 'hello.world.whats.up');
 // "nothing much"
 ```
-
-
+---
 ```javascript
 '^Hello$'.escapeForRegex();
 // "\^Hello\$" for when you want to create a RegExp with the constructor
 ```
-
-
+---
 ```javascript
 'Hello'.startsWith('h');
 // true
 ```
-
-
+---
 ```javascript
 'Hello'.endsWith('h');
 // false
 ```
-
-
+---
 ```javascript
 'Hello'.contains('l');
 // true
 ```
-
-
+---
 ```javascript
 '    '.isEmptyOrWhiteSpace();
 // true
 ```
-
-
+---
 ```javascript
 'Hello{0}{1}{0}'.format(' ', 'World');
 // "Hello World "
 ```
-
-
+---
 ```javascript
 'yoho '.repeat(2);
 // "yoho yoho "
 ```
-
-
+---
 ```javascript
 'Some$Really%Obnoxious---Thing'.slugify();
 // "some-really-obnoxious-thing"
 ```
-
-
+---
 ```javascript
 'http://www.google.com?hello=world&whats=up'.parseUrl();
 // parseUrl returns an HTMLAnchorElement, with two additions:
 // .parameterArray = array of key/values in query string
 // .parameterObject = object with key/values
 ```
-
-
+---
 ```javascript
 'div'.el();
 // Returns HTMLDivElement
 ```
-
-
+---
 ```javascript
 var x = 5; x.toDecimal(3);
 // "5.000"
@@ -128,44 +117,37 @@ var x = 5; x.toCurrency();
 
 // Both of these have culture options available
 ```
-
-
+---
 ```javascript
 [1,2,3,4,5].contains(4);
 // true
 ```
-
-
+---
 ```javascript
 [1,2,3,4,5].removeAt(1);
 // [1,3,4,5]
 ```
-
-
+---
 ```javascript
 new Date().toShortDateString();
 // "10/16/2014"
 ```
-
-
+---
 ```javascript
 new Date().toShortTimeString()
 // "12:34 AM"
 ```
-
-
+---
 ```javascript
 new Date().toShortDateTimeString();
 // "10/16/2014 12:10 PM"
 ```
-
-
+---
 ```javascript
 new Date().toSortString();
 // "2014:09:16:00:10:11:202"
 ```
-
-
+---
 ```javascript
 halis.isStringOrThrow('hi');
 // undefined, nothing happens
@@ -188,8 +170,7 @@ Function: 'Function'
 You can access these at halis.types (array) or halis.typeNames (object)
 */
 ```
-
-
+---
 ```javascript
 halis.isArrayAndNotEmptyOrThrow([]);
 // "value is empty"
@@ -200,8 +181,7 @@ halis.isObjectAndNotEmptyOrThrow({});
 halis.isStringAndNotEmptyOrThrow({});
 // "value is not of type String"
 ```
-
-
+---
 ```javascript
 halis.query.id('') // getElementById()
 halis.q.class('') // getElementsByClassName(), can use q instead of query
@@ -218,8 +198,7 @@ halis.query.all('') // querySelectorAll()
 // (so you can operate on an array like jQuery)
 // native methods much faster than jQuery
 ```
-
-
+---
 ```javascript
 // These methods are similar to what you use in jQuery
 // they operate on an HtmlCollection, which is what the halis query methods return
@@ -234,8 +213,7 @@ halis.query.all('') // querySelectorAll()
   .clone(), .cloneShallow()
   .prev(), .next()
 ```
-
-
+---
 ```javascript
 // halis.fn has convenience methods to operate on one HTMLElement
 // these will be delegated to run on an entire HtmlCollection
@@ -244,8 +222,7 @@ halis.fn.get(el) // returns value of element no matter the type
 // and in turn
 HtmlCollection.get()
 ```
-
-
+---
 ```javascript
 h.ajax.post( url, data, successFn, errorFn );
 h.ajax.put( url, data, successFn, errorFn );
@@ -254,13 +231,12 @@ h.ajax.delete( url, data, successFn, errorFn );
 
 // lightweight ajax wrapper
 ```
-
-
+---
 ```javascript
 return halis.cancelEvent(e);
 // prevent defualt, stop propagation, return false
 ```
-
+---
 ```html
 <script type="text/template" id="firstTemplate" name="first">
   <div>Hello</div>
