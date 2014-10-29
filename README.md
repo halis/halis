@@ -261,10 +261,17 @@ halis.getTemplates();
 ```
 ---
 ```javascript
-halis.namespace('halis.hello.world');
-// will create halis.hello = { world: {} };
-// will not overwrite anything that exists
-// (this is why it does not overwrite halis)
+// halis.namespace = function( str, context ) {
+var x = {};
+halis.namespace('halis.hello.world', x);
+// x is now:
+// { halis: { hello: { world: { } } } }
+
+// Note that context is optional and if omitted then
+// window will be used
+
+// Note that this will not overwrite a property that already exists
+// It will skip existing properties and continue on
 ```
 ---
 ```javascript
