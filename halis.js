@@ -730,6 +730,7 @@
     parts = str.split('.');
     pointer = context;
     _.each(parts, function( part ) {
+      if (part.isEmptyOrWhiteSpace()) halis.throw('invalid query');
       if (!pointer[part]) pointer[part] = {};
 
       pointer = pointer[part];
