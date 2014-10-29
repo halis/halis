@@ -254,6 +254,7 @@ return halis.cancelEvent(e);
 // You may extract the above templates from the head element like so:
 halis.getTemplates();
 // The templates will reside at halis.templates
+// Note that the name attribute is required
 // Object {first: "<div>Hello</div>", second: "<div>There</div>", third: "<div>World</div>"}
 // Also note that the templates will be removed from the dom
 ```
