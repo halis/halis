@@ -202,7 +202,7 @@ halis.query.all('') // querySelectorAll()
 ```javascript
 // These methods are similar to what you use in jQuery
 // they operate on an HtmlCollection, which is what the halis query methods return
-  .html(html)   // sets html
+  .html(html)   // sets html (or gets if html null or undefined)
   .text(text)   // sets text
   .append(html) // appends html
   .empty()      // empty html
@@ -234,7 +234,7 @@ h.ajax.delete( url, data, successFn, errorFn );
 ---
 ```javascript
 return halis.cancelEvent(e);
-// prevent defualt, stop propagation, return false
+// e.preventDefault, e.stopImmediatePropagation, return false
 ```
 ---
 ```html
