@@ -238,15 +238,17 @@ return halis.cancelEvent(e);
 ```
 ---
 ```html
-<script type="text/template" id="firstTemplate" name="first">
-  <div>Hello</div>
-</script>
-<script type="text/template" id="secondTemplate" name="second">
-  <div>There</div>
-</script>
-<script type="text/template" id="thirdTemplate" name="third">
-  <div>World</div>
-</script>
+<head>
+  <script type="text/template" id="firstTemplate" name="first">
+    <div>Hello</div>
+  </script>
+  <script type="text/template" id="secondTemplate" name="second">
+    <div>There</div>
+  </script>
+  <script type="text/template" id="thirdTemplate" name="third">
+    <div>World</div>
+  </script>
+</head>
 ```
 ```javascript
 // You may extract the above templates from the head element like so:
