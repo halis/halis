@@ -334,9 +334,10 @@ function CellFactory( constructorFn ) {
 // then we can register these in halis.plans via:
 // halis.engineer = function( constructorFn, factoryFn ) {
 
-halis.engineer(halis.Cell, halis.CellFactory);
+halis.engineer(Cell, CellFactory);
 // Object {plan: function, builder: function, build: function}
 
+// When you need a new Cell you can simply call:
 halis.plans.Cell.build()
 // Cell {x: 1, y: 1}
 
