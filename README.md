@@ -283,3 +283,27 @@ halis.namespace('halis.hello.world');
   halis.compose(x, [Cell, HeaderCell]);
   // Object {x: 0, y: 0, HeaderText: ""}
 ```
+---
+```javascript
+// halis.throw = function( msg, showStackTrace ) {
+
+h.throw('test');
+Error
+    at Object.halis.throw (file:///C:/halis/halis.js:754:47)
+    at <anonymous>:2:8
+    at Object.InjectedScript._evaluateOn (<anonymous>:732:137)
+    at Object.InjectedScript._evaluateAndWrap (<anonymous>:665:34)
+    at Object.InjectedScript.evaluate (<anonymous>:579:21) halis.js:754
+Uncaught test
+
+h.throw('test', false);
+Uncaught test 
+
+// halis also uses this throw method internally now, in functions like isStringOrThrow
+// there is a config option:
+window.halisConfig = {
+  logInsteadOfThrow: true,
+};
+// if this is set in halisConfig (in a script tag before halis.js is loaded)
+// then anytime halis.throw is called it will log instead of throw
+```
