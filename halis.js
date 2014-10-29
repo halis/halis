@@ -16,6 +16,8 @@
     }
     halis = window[globalNS] = {};
 
+    halis.config = _.extend({}, halisConfig);
+
     if (!window.h) window.h = halis;
 
     halis.noConflict = function() {
@@ -45,8 +47,8 @@
   pro.query = pro.query || function( obj ) {
     var parts, part, result, q;
     halis.isObjectOrThrow(obj);
-    if (this.endsWith('.') || this.startsWith('.')) throw 'invalid query';
-    if (this.match(/[^a-zA-Z0-9\_\$\.]/)) throw 'invalid query';
+    if (this.endsWith('.') || this.startsWith('.')) halis.throw('invalid query');
+    if (this.match(/[^a-zA-Z0-9\_\$\.]/)) halis.throw('invalid query');
 
     if (_.isEmpty(obj) || this.isEmptyOrWhiteSpace()) return;
     if (!this.contains('.')) return obj[this];
@@ -255,8 +257,8 @@
 
   pro.removeAt = pro.removeAt || function( index ) {
     halis.isNumberOrThrow(index);
-    if (index < 0) throw 'out of bounds';
-    if (index >= this.length) throw 'out of bounds';
+    if (index < 0) halis.throw('out of bounds');
+    if (index >= this.length) halis.throw('out of bounds');
     if (!this.length) return this;
     this.splice(index, 1);
     return this;
@@ -323,24 +325,24 @@
     fnName = '{0}OrThrow'.format(fn);
 
     halis[fnName] = function( obj ) {
-      if (!_[fn](obj)) throw 'value is not of type {0}'.format(type);
+      if (!_[fn](obj)) halis.throw('value is not of type {0}'.format(type));
     };
   });
   pro = null;
 
   halis.isArrayAndNotEmptyOrThrow = function( obj ) {
     halis.isArrayOrThrow(obj);
-    if (_.isEmpty(obj)) throw 'value is empty';
+    if (_.isEmpty(obj)) halis.throw('value is empty');
   };
 
   halis.isObjectAndNotEmptyOrThrow = function( obj ) {
     halis.isObjectOrThrow(obj);
-    if (_.isEmpty(obj)) throw 'value is empty';
+    if (_.isEmpty(obj)) halis.throw('value is empty');
   };
 
   halis.isStringAndNotEmptyOrThrow = function( obj ) {
     halis.isStringOrThrow(obj);
-    if (obj.isEmptyOrWhiteSpace()) throw 'value is empty';
+    if (obj.isEmptyOrWhiteSpace()) halis.throw('value is empty');
   };
 
   function HtmlCollection( arr ) {
@@ -440,7 +442,7 @@
   };
 
   halis.isOrThrow = function( obj, type ) {
-    if (!halis.is(obj, type)) throw 'obj is not type {0}'.format(type.name);
+    if (!halis.is(obj, type)) halis.throw('obj is not type {0}'.format(type.name));
   };
 
   pro = HtmlCollection.prototype;
@@ -713,17 +715,20 @@
     });
   };
 
-  halis.namespace = function( str ) {
+  halis.namespace = function( str, context ) {
     var parts, pointer;
     h.isStringAndNotEmptyOrThrow(str);
 
+    if (context == null) context = window;
+    else h.isObjectOrThrow(context);
+
     if (!str.contains('.')) {
-      if (window[str]) return;
-      window[str] = {};
+      if (context[str]) return;
+      context[str] = {};
     }
 
     parts = str.split('.');
-    pointer = window;
+    pointer = context;
     _.each(parts, function( part ) {
       if (!pointer[part]) pointer[part] = {};
 
@@ -741,6 +746,14 @@
     });
 
     return obj;
+  };
+
+  halis.throw = function( msg, showStackTrace ) {
+    h.isStringAndNotEmptyOrThrow(msg);
+
+    if (showStackTrace !== false) console.log(new Error().stack);
+    if(halis.config.logInsteadOfThrow === true) console.log(msg);
+    else throw msg;
   };
 
 }(_, window.halisConfig));
