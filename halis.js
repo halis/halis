@@ -731,4 +731,16 @@
     });
   };
 
+  halis.compose = function( obj, constructors ) {
+    h.isObjectOrThrow(obj);
+    halis.isArrayAndNotEmptyOrThrow(constructors);
+
+    _.each(constructors, function( constructor ) {
+      halis.isFunctionOrThrow(constructor);
+      _.extend(obj, new constructor());
+    });
+
+    return obj;
+  };
+
 }(_, window.halisConfig));

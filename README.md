@@ -261,3 +261,25 @@ halis.namespace('halis.hello.world');
 // will not overwrite anything that exists
 // (this is why it does not overwrite halis)
 ```
+---
+```javascript
+
+  // If we have an empty object x and the following constructors:
+
+  var x = {};
+
+  function Cell() {
+    this.x = 0;
+    this.y = 0;
+  };
+
+  function HeaderCell() {
+    this.HeaderText = '';
+  };
+
+  // And we want to achieve multiple inheritance or composition
+  // Then we can do that with:
+
+  halis.compose(x, [Cell, HeaderCell]);
+  // Object {x: 0, y: 0, HeaderText: ""}
+```
