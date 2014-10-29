@@ -713,4 +713,22 @@
     });
   };
 
+  halis.namespace = function( str ) {
+    var parts, pointer;
+    h.isStringAndNotEmptyOrThrow(str);
+
+    if (!str.contains('.')) {
+      if (window[str]) return;
+      window[str] = {};
+    }
+
+    parts = str.split('.');
+    pointer = window;
+    _.each(parts, function( part ) {
+      if (!pointer[part]) pointer[part] = {};
+
+      pointer = pointer[part];
+    });
+  };
+
 }(_, window.halisConfig));

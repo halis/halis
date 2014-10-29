@@ -274,6 +274,14 @@ return halis.cancelEvent(e);
 ```
 ```javascript
 // You may extract the above templates from the head element like so:
-halis.getTemplates()
+halis.getTemplates();
+// The templates will reside at halis.templates
 // Object {first: "<div>Hello</div>", second: "<div>There</div>", third: "<div>World</div>"}
+```
+---
+```javascript
+halis.namespace('halis.hello.world');
+// will create halis.hello = { world: {} };
+// will not overwrite anything that exists
+// (this is why it does not overwrite halis)
 ```
