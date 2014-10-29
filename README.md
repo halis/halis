@@ -260,3 +260,20 @@ h.ajax.delete( url, data, successFn, errorFn );
 return halis.cancelEvent(e);
 // prevent defualt, stop propagation, return false
 ```
+
+```html
+<script type="text/template" id="firstTemplate" name="first">
+  <div>Hello</div>
+</script>
+<script type="text/template" id="secondTemplate" name="second">
+  <div>There</div>
+</script>
+<script type="text/template" id="thirdTemplate" name="third">
+  <div>World</div>
+</script>
+```
+```javascript
+// You may extract the above templates from the head element like so:
+halis.getTemplates()
+// Object {first: "<div>Hello</div>", second: "<div>There</div>", third: "<div>World</div>"}
+```
