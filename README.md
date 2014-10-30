@@ -385,8 +385,8 @@ var employeeFunctions = {
 
 halis.inherit(Employee, Person, employeeFunctions);
 var x = new Employee('Chris', 33);
-// Employee {name: "Chris", colors: Array[3], age: 33, constructor: function, init: function}
+// Employee {name: "Chris", colors: Array[3], age: 33, employeeId: '1234', constructor: function, init: function}
 
 x.init(); // both init methods called here
-// Employee {name: "Chris Grimes Sr.", colors: Array[3], age: 33, constructor: function, init: function}
+// Employee {name: "Chris Grimes Sr.", colors: Array[3], age: 33, employeeId: '1234',  constructor: function, init: function}
 ```
