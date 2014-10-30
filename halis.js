@@ -784,7 +784,7 @@
 
   halis.functions = function( Type, typeFunctions ) {
     _.each(_.keys(typeFunctions), function( key ) {
-      Type.prototype[key] = typeFunctions[key];
+      Type.prototype[key] = Type.prototype[key] || typeFunctions[key];
     });
   };
 

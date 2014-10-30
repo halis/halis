@@ -371,6 +371,8 @@ var functions = {
 // The following call will place the functions on the
 // prototype of the type
 halis.functions(Person, functions);
+// Note that if any of the functions exist on the prototype
+// they will be skipped
 ```
 ---
 ```javascript
