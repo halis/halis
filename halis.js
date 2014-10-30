@@ -782,4 +782,14 @@
     return plan;
   };
 
+  halis.inherit = function( Type, BaseType, typeFunctions ) {
+    var prototype = Object.create(BaseType.prototype);
+    prototype.constructor = Type;
+    Type.prototype = prototype;
+
+    _.each(_.keys(typeFunctions), function( key ) {
+      Type.prototype[key] = typeFunctions[key];
+    });
+  };
+
 }(_, window.halisConfig));

@@ -331,9 +331,9 @@ function Cell() {
   this.y = 0;
 };
 
-function CellFactory( constructorFn ) {
+function CellFactory( ConstructorFn ) {
   var result;
-  result = new constructorFn();
+  result = new ConstructorFn();
   result.x += 1;
   result.y += 1;
   return result;
@@ -352,4 +352,41 @@ halis.engineer(Cell, CellFactory);
 halis.plans.Cell.build()
 // Cell {x: 1, y: 1}
 
+```
+---
+```javascript
+// halis.inherit = function( Type, BaseType, typeFunctions ) {
+// Classical inheritance
+
+// Say we have a base class Person
+// and sub class Employee
+Person = function( name ) {
+  this.name = name;
+  this.colors = ['red', 'blue', 'green'];
+};
+Person.prototype.init = function() {
+  this.name += ' Grimes';
+};
+
+Employee = function( name, age ) {
+  Person.call(this, name);
+  this.age = age;
+  this.employeeId = '1234';
+};
+
+// Define Employee functions like this and they will be
+// placed on the Employee prototype after the inheritance is setup
+var employeeFunctions = {
+  init: function() {
+    Person.prototype.init.call(this); // Can call functions on the base class like this
+    this.name += ' Sr.';
+  },
+};
+
+halis.inherit(Employee, Person, employeeFunctions);
+var x = new Employee('Chris', 33);
+// Employee {name: "Chris", colors: Array[3], age: 33, constructor: function, init: function}
+
+x.init(); // both init methods called here
+// Employee {name: "Chris Grimes Sr.", colors: Array[3], age: 33, constructor: function, init: function}
 ```
