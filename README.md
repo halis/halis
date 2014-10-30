@@ -355,6 +355,25 @@ halis.plans.Cell.build()
 ```
 ---
 ```javascript
+// halis.functions = function( Type, typeFunctions ) {
+// If we have the following Type and functions:
+
+function Person() {
+  this.name = '';
+  this.age = 0;
+}
+var functions = {
+  birthday = function() {
+    this.age++;
+  };
+};
+
+// The following call will place the functions on the
+// prototype of the type
+halis.functions(Person, functions);
+```
+---
+```javascript
 // halis.inherit = function( Type, BaseType, typeFunctions ) {
 // Classical inheritance
 
