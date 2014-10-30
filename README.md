@@ -390,7 +390,7 @@ Person.prototype.init = function() {
 };
 
 Employee = function( name, age ) {
-  Person.call(this, name);
+  Person.call(this, name); // You need to call the base constructor like this (passing in whatever it takes)
   this.age = age;
   this.employeeId = '1234';
 };
